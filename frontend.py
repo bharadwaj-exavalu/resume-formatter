@@ -166,7 +166,7 @@ if uploaded_file:
             st.download_button(
                 label="⬇️ Download Formatted Resume",
                 data=response.content,
-                file_name=uploaded_file.name.replace(".pdf", "_EV_Format.docx").replace(".docx", "_EV_Format.docx"),
+                file_name=os.path.splitext(uploaded_file.name)[0] + "_EV_Format.docx",
                 mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
             )
         else:

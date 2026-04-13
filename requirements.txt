@@ -9,3 +9,6 @@ docxtpl
 jinja2
 requests
 streamlit
+pdfplumber
+pytesseract
+pdf2image
