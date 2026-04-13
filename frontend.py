@@ -163,7 +163,6 @@ if uploaded_file:
 
         if response.status_code == 200:
             st.success("✅ Your formatted resume is ready to download!")
-            st.snow()
             st.download_button(
                 label="⬇️ Download Formatted Resume",
                 data=response.content,
