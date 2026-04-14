@@ -1,0 +1,46 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - main   # triggers on push
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/key.pem
+          chmod 600 ~/.ssh/key.pem
+
+      - name: Deploy to EC2
+        run: |
+          ssh -i ~/.ssh/key.pem -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+
+            echo "🚀 Connected to EC2"
+
+            cd /home/ec2-user/resume-formatter
+
+            echo "📥 Pull latest code"
+            git reset --hard
+            git pull origin main
+
+            echo "🐍 Activate virtual env"
+            source venv/bin/activate
+
+            echo "📦 Install dependencies"
+            pip install -r requirements.txt
+
+            echo "🔄 Restart services"
+            sudo systemctl restart fastapi
+            sudo systemctl restart streamlit
+
+            echo "✅ Deployment successful"
+
+          EOF

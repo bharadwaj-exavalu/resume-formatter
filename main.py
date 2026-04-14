@@ -13,7 +13,7 @@ from extractor import extract_resume_text
 from llm import extract_structured_data
 from renderer import render_resume
 
-app = FastAPI()
+app = FastAPI(title="My Resume backend",version="1.0.0")
 
 app.add_middleware(
     CORSMiddleware,
